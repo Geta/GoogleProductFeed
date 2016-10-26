@@ -4,7 +4,7 @@
 [![Platform](https://img.shields.io/badge/Platform-.NET 4.5.2-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
 
 
-More information: https://support.google.com/merchants/answer/160593?hl=en and https://support.google.com/merchants/answer/188494
+This will create a Google Product Feed based on the [Atom specification](https://support.google.com/merchants/answer/160593?hl=en). For information on what is required and what the different attributes/properties mean, please see the [Product data specification](https://support.google.com/merchants/answer/188494)
 
 ## Installation
 
@@ -25,7 +25,7 @@ You need to implement the abstract class FeedBuilder and the method Build. This 
 ```csharp
 public class EpiFeedBuilder : FeedBuilder
 {
-	public Feed Build()
+	public override Feed Build()
 	{
 		var feed = new Feed
 		{
@@ -82,7 +82,7 @@ public class EpiFeedBuilder : FeedBuilder
 
 					entry.Price = defaultPrice.UnitPrice.ToString();
 					entry.SalePrice = discountPrice.ToString();
-					entry.SalePriceEffectiveDate = DateTime.UtcNow,
+					entry.SalePriceEffectiveDate = DateTime.UtcNow;
 				}
 
 				entries.Add(entry);
