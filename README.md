@@ -1,1 +1,101 @@
-# GoogleProductFeed
+# Geta Google Product Feed
+
+More information: https://support.google.com/merchants/answer/160593?hl=en and https://support.google.com/merchants/answer/188494
+
+## Installation
+
+```
+Install-Package Geta.GoogleProductFeed
+```
+
+Note that you need to make sure your projects calls config.MapHttpAttributeRoutes(); in order for the feed routing to work.
+
+Default URL is: /googleproductfeed
+
+## FeedBuilder
+
+You need to implement the abstract class FeedBuilder and the method Build. This will provide the feed data.
+
+### Example
+
+```csharp
+public class EpiFeedBuilder : FeedBuilder
+{
+	public Feed Build()
+	{
+		var feed = new Feed
+		{
+			Updated = DateTime.UtcNow,
+			Title = "LexMod products",
+			Link = "https://mysite.com"
+		};
+
+		var catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
+
+		var entries = new List<Entry>();
+		var market = _currentMarket.GetCurrentMarket();
+		var currency = _currencyservice.GetCurrentCurrency();
+
+		foreach (var catalogReference in catalogReferences)
+		{
+			var catalogContent = _contentLoader.Get<CatalogContentBase>(catalogReference);
+
+			// ReSharper disable once IsExpressionAlwaysFalse
+			if (catalogContent is DefaultVariationContent)
+			{
+				var variationContent = (DefaultVariationContent)catalogContent;
+				var defaultPrice = ProductHelper.GetDefaultPrice(variationContent, market, currency);
+
+				var entry = new Entry
+				{
+					Id = variationContent.Code,
+					Title = variationContent.DisplayName,
+					Description = variationContent.Description.ToHtmlString(),
+					Link = variationContent.ContentLink.GetFriendlyUrl(true),
+					Condition = "new",
+					Availablity = "in stock",
+					ImageLink = variationContent.GetDefaultAsset<IContentImage>(), // TODO make external
+					Brand = "LexMod",
+					MPN = "",
+					GTIN = "", // TODO needs to be set
+					GoogleProductCategory = "",
+					// Electronics > Video > Televisions > Flat Panel Televisions, TODO optional
+					ProductType = "", // Consumer Electronics &gt; TVs &gt; Flat Panel TVs, TODO optional
+					Shipping = new List<Shipping>
+					{
+						new Shipping
+						{
+							Price = "Free",
+							Country = "US",
+							Service = "Standard"
+						}
+					}
+				};
+
+				if (defaultPrice != null)
+				{
+					var discountPrice = ProductHelper.GetDiscountPrice(defaultPrice, market, currency);
+
+					entry.Price = defaultPrice.UnitPrice.ToString();
+					entry.SalePrice = discountPrice.ToString();
+					entry.SalePriceEffectiveDate = DateTime.UtcNow,
+				}
+
+				entries.Add(entry);
+			}
+		}
+
+		feed.Entries = entries;
+
+		return feed;
+	}
+}
+```
+
+Note that you should cache this data since the WebAPI controller won`t do that for you and this can be quite a heavy operation.
+
+Then you need to use this as the default implementation for FeedBuilder. Using StructureMap it will look something like this in your registry class:
+
+```csharp
+For<FeedBuilder>().Use<CustomFeedBuilder>();
+```

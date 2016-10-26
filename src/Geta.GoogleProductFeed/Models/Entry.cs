@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
+namespace Geta.GoogleProductFeed.Models
+{
+    [XmlType(TypeName = "entry"), Serializable]
+    public class Entry
+    {
+        [XmlElement("id", Namespace = "http://base.google.com/ns/1.0")]
+        public string Id { get; set; }
+
+        [XmlElement("title", Namespace = "http://base.google.com/ns/1.0")]
+        public string Title { get; set; }
+
+        [XmlElement("description", Namespace = "http://base.google.com/ns/1.0")]
+        public string Description { get; set; }
+
+        [XmlElement("link", Namespace = "http://base.google.com/ns/1.0")]
+        public string Link { get; set; }
+
+        [XmlElement("image_link", Namespace = "http://base.google.com/ns/1.0")]
+        public string ImageLink { get; set; }
+
+        [XmlElement("condition", Namespace = "http://base.google.com/ns/1.0")]
+        public string Condition { get; set; }
+
+        [XmlElement("availability", Namespace = "http://base.google.com/ns/1.0")]
+        public string Availablity { get; set; }
+
+        [XmlElement("price", Namespace = "http://base.google.com/ns/1.0")]
+        public string Price { get; set; }
+
+        [XmlElement("sale_price", Namespace = "http://base.google.com/ns/1.0")]
+        public string SalePrice { get; set; }
+
+        [XmlElement("sale_price_effective_date", Namespace = "http://base.google.com/ns/1.0")]
+        public DateTime SalePriceEffectiveDate { get; set; }
+
+        [XmlElement("brand", Namespace = "http://base.google.com/ns/1.0")]
+        public string Brand { get; set; }
+
+        // Required if item is apparel
+        [XmlElement("gender", Namespace = "http://base.google.com/ns/1.0")]
+        public string Gender { get; set; }
+
+        // Required if item is apparel
+        [XmlElement("age_group", Namespace = "http://base.google.com/ns/1.0")]
+        public string AgeGroup { get; set; }
+
+        // Required if item is apparel
+        [XmlElement("color", Namespace = "http://base.google.com/ns/1.0")]
+        public string Color { get; set; }
+
+        // Required if item is apparel
+        [XmlElement("size", Namespace = "http://base.google.com/ns/1.0")]
+        public string Size { get; set; }
+
+        [XmlElement("mpn", Namespace = "http://base.google.com/ns/1.0")]
+        public string MPN { get; set; }
+
+        [XmlElement("gtin", Namespace = "http://base.google.com/ns/1.0")]
+        public string GTIN { get; set; }
+
+        [XmlElement("shipping", Namespace = "http://base.google.com/ns/1.0")]
+        public List<Shipping> Shipping { get; set; }
+
+        [XmlElement("google_product_category", Namespace = "http://base.google.com/ns/1.0")]
+        public string GoogleProductCategory { get; set; }
+
+        [XmlElement("product_type", Namespace = "http://base.google.com/ns/1.0")]
+        public string ProductType { get; set; }
+    }
+}
