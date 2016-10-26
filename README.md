@@ -30,7 +30,7 @@ public class EpiFeedBuilder : FeedBuilder
 		var feed = new Feed
 		{
 			Updated = DateTime.UtcNow,
-			Title = "LexMod products",
+			Title = "My products",
 			Link = "https://mysite.com"
 		};
 
@@ -63,7 +63,6 @@ public class EpiFeedBuilder : FeedBuilder
 					MPN = "",
 					GTIN = "", // TODO needs to be set
 					GoogleProductCategory = "",
-					// Electronics > Video > Televisions > Flat Panel Televisions, TODO optional
 					ProductType = "", // Consumer Electronics &gt; TVs &gt; Flat Panel TVs, TODO optional
 					Shipping = new List<Shipping>
 					{
