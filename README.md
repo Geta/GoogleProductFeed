@@ -100,5 +100,5 @@ Note that you should cache this data since the WebAPI controller won`t do that f
 Then you need to use this as the default implementation for FeedBuilder. Using StructureMap it will look something like this in your registry class:
 
 ```csharp
-For<FeedBuilder>().Use<CustomFeedBuilder>();
+For<FeedBuilder>().Use<EpiFeedBuilder>();
 ```
