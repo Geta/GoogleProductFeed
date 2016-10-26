@@ -1,5 +1,9 @@
 # Geta Google Product Feed
 
+![](http://tc.geta.no/app/rest/builds/buildType:(id:TeamFrederik_GoogleProductFeed_CreateAndPublishNuGetPackage)/statusIcon)
+[![Platform](https://img.shields.io/badge/Platform-.NET 4.5.2-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
+
+
 More information: https://support.google.com/merchants/answer/160593?hl=en and https://support.google.com/merchants/answer/188494
 
 ## Installation
