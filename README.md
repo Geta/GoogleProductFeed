@@ -59,12 +59,10 @@ public class EpiFeedBuilder : FeedBuilder
 					Link = variationContent.ContentLink.GetFriendlyUrl(true),
 					Condition = "new",
 					Availablity = "in stock",
-					ImageLink = variationContent.GetDefaultAsset<IContentImage>(), // TODO make external
 					Brand = variationContent.Brand,
 					MPN = "",
-					GTIN = "", // TODO needs to be set
+					GTIN = variationContent.GTIN,
 					GoogleProductCategory = "",
-					ProductType = "", // Consumer Electronics &gt; TVs &gt; Flat Panel TVs, TODO optional
 					Shipping = new List<Shipping>
 					{
 						new Shipping
@@ -75,6 +73,15 @@ public class EpiFeedBuilder : FeedBuilder
 						}
 					}
 				};
+				
+				string image = variationContent.GetDefaultAsset<IContentImage>();
+
+				if (!string.IsNullOrEmpty(image))
+				{
+				    var imageUrl = new Url(image);
+
+				    entry.ImageLink = imageUrl.ToAbsoluteUri().ToString();
+				}
 
 				if (defaultPrice != null)
 				{
