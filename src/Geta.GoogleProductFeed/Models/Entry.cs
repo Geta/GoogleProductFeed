@@ -23,7 +23,7 @@ namespace Geta.GoogleProductFeed.Models
         public string ImageLink { get; set; }
 
         [XmlElement("additional_image_link", Namespace = "http://base.google.com/ns/1.0")]
-        public string[] AdditionalImageLink { get; set; }
+        public string[] AdditionalImageLinks { get; set; }
 
         [XmlElement("condition", Namespace = "http://base.google.com/ns/1.0")]
         public string Condition { get; set; }
