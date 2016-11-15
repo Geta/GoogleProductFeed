@@ -22,6 +22,9 @@ namespace Geta.GoogleProductFeed.Models
         [XmlElement("image_link", Namespace = "http://base.google.com/ns/1.0")]
         public string ImageLink { get; set; }
 
+        [XmlElement("additional_image_link", Namespace = "http://base.google.com/ns/1.0")]
+        public string[] AdditionalImageLink { get; set; }
+
         [XmlElement("condition", Namespace = "http://base.google.com/ns/1.0")]
         public string Condition { get; set; }
 
@@ -62,6 +65,9 @@ namespace Geta.GoogleProductFeed.Models
         [XmlElement("gtin", Namespace = "http://base.google.com/ns/1.0")]
         public string GTIN { get; set; }
 
+        [XmlElement("item_group_id", Namespace = "http://base.google.com/ns/1.0")]
+        public string ItemGroupId { get; set; }
+
         [XmlElement("shipping", Namespace = "http://base.google.com/ns/1.0")]
         public List<Shipping> Shipping { get; set; }
 
@@ -70,5 +76,17 @@ namespace Geta.GoogleProductFeed.Models
 
         [XmlElement("product_type", Namespace = "http://base.google.com/ns/1.0")]
         public string ProductType { get; set; }
+
+        [XmlElement("shipping_weight", Namespace = "http://base.google.com/ns/1.0")]
+        public string ShippingWeight { get; set; }
+
+        [XmlElement("shipping_length", Namespace = "http://base.google.com/ns/1.0")]
+        public string ShippingLength { get; set; }
+
+        [XmlElement("shipping_height", Namespace = "http://base.google.com/ns/1.0")]
+        public string ShippingHeight { get; set; }
+
+        [XmlElement("shipping_width", Namespace = "http://base.google.com/ns/1.0")]
+        public string ShippingWidth { get; set; }
     }
 }
