@@ -110,3 +110,5 @@ Then you need to use this as the default implementation for FeedBuilder. Using S
 ```csharp
 For<FeedBuilder>().Use<EpiFeedBuilder>();
 ```
+
+Make sure dependency injection is setup for Web API. The quickest way to do this is install the package: Foundation.WebApi.
