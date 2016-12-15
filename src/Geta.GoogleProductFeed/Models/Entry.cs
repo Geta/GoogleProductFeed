@@ -37,8 +37,9 @@ namespace Geta.GoogleProductFeed.Models
         [XmlElement("sale_price", Namespace = "http://base.google.com/ns/1.0")]
         public string SalePrice { get; set; }
 
+        // Changed to support the expected date range, https://support.google.com/merchants/answer/6324460
         [XmlElement("sale_price_effective_date", Namespace = "http://base.google.com/ns/1.0")]
-        public DateTime SalePriceEffectiveDate { get; set; }
+        public string SalePriceEffectiveDate { get; set; }
 
         [XmlElement("brand", Namespace = "http://base.google.com/ns/1.0")]
         public string Brand { get; set; }
