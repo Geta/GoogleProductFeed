@@ -89,5 +89,8 @@ namespace Geta.GoogleProductFeed.Models
 
         [XmlElement("shipping_width", Namespace = "http://base.google.com/ns/1.0")]
         public string ShippingWidth { get; set; }
+        
+        [XmlElement("identifier_exists", Namespace = "http://base.google.com/ns/1.0")]
+        public string IdentifierExists { get; set; }
     }
 }
