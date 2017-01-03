@@ -103,8 +103,6 @@ public class EpiFeedBuilder : FeedBuilder
 }
 ```
 
-Note that you should cache this data since the WebAPI controller won`t do that for you and this can be quite a heavy operation.
-
 Then you need to use this as the default implementation for FeedBuilder. Using StructureMap it will look something like this in your registry class:
 
 ```csharp
@@ -112,3 +110,9 @@ For<FeedBuilder>().Use<EpiFeedBuilder>();
 ```
 
 Make sure dependency injection is setup for Web API. The quickest way to do this is install the package: Foundation.WebApi.
+
+## Feed Generation
+Populating the feed is handled through a scheduled job and the result is serialized and stored in the DDS. See job 'Google ProductFeed - Create feed' in admin mode. 
+
+## Troubleshooting
+If your request to /googleproductfeed returns 404 with message 'No feed generated', make sure you run the job to populate the feed.
