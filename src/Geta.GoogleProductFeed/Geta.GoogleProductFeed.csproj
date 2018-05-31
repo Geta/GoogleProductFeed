@@ -173,7 +173,6 @@
     <Compile Include="Repositories\IFeedRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Geta.GoogleProductFeed.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
