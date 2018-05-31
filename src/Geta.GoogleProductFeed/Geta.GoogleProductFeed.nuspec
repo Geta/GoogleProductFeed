@@ -11,5 +11,8 @@
     <description>$description$</description>
     <releaseNotes>Google Product Feed generator</releaseNotes>
     <copyright>Copyright Geta 2016</copyright>
+    <dependencies>
+      <dependency id="EPiServer.CMS.Core" version="[11.2.1, 12)" />
+    </dependencies>
   </metadata>
 </package>
