@@ -27,8 +27,7 @@ namespace Geta.GoogleProductFeed.Controllers
             if (feed == null)
                 return Content(HttpStatusCode.NotFound, "No feed generated", new NamespacedXmlMediaTypeFormatter());
 
-            var hostUrl = HttpContext.Current.Request.Url.Host;
-            feed.Entries = feed.Entries.Where(e => e.Link.Contains(hostUrl)).ToList();
+            feed.Entries = feed.Entries.Where(e => e.Link.Contains(Request.RequestUri.Host)).ToList();
 
             return Content(HttpStatusCode.OK, feed, new NamespacedXmlMediaTypeFormatter());
         }
