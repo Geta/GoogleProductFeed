@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Google Product Feed generator</releaseNotes>
-    <copyright>Copyright Geta 2016</copyright>
+    <copyright>Copyright Geta 2019</copyright>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[11.2.1, 12)" />
     </dependencies>

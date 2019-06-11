@@ -28,7 +28,7 @@ namespace Geta.GoogleProductFeed
 
             var feedData = new FeedData
             {
-                Created = feed.Updated
+                CreatedUtc = feed.Updated
             };
 
             using (var ms = new MemoryStream())
@@ -44,7 +44,6 @@ namespace Geta.GoogleProductFeed
             _feedRepository.RemoveOldVersion();
 
             return true;
-
         }
 
         public Feed GetLatestFeed()
@@ -55,8 +54,11 @@ namespace Geta.GoogleProductFeed
                 return null;
 
             var serializer = new XmlSerializer(typeof(Feed), Ns);
-            var ms = new MemoryStream(feedData.FeedBytes);
-            return serializer.Deserialize(ms) as Feed;
+
+            using (MemoryStream ms = new MemoryStream(feedData.FeedBytes))
+            {
+                return serializer.Deserialize(ms) as Feed;
+            }
         }
     }
 }

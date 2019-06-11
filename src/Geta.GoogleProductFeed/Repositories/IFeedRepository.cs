@@ -1,5 +1,4 @@
-﻿using EPiServer.Data;
-using Geta.GoogleProductFeed.Models;
+﻿using Geta.GoogleProductFeed.Models;
 
 namespace Geta.GoogleProductFeed.Repositories
 {

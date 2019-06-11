@@ -3,7 +3,7 @@ using EPiServer.Scheduler;
 
 namespace Geta.GoogleProductFeed
 {
-    [ScheduledPlugIn(DisplayName = "Google ProductFeed - Create feed", Description = "Creates and stores productfeed in database")]
+    [ScheduledPlugIn(DisplayName = "Google ProductFeed - Create feed", Description = "Creates and stores Google product feed in database")]
     public class FeedBuilderCreateJob : ScheduledJobBase
     {
         private readonly IFeedHelper _feedHelper;
@@ -19,6 +19,5 @@ namespace Geta.GoogleProductFeed
 
             return result ? "Job successfully executed. Feed created and saved to the database." : "Job failed - FeedBuilder.Build() returned null.";
         }
-        
     }
 }
