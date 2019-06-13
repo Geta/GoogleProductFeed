@@ -1,11 +1,6 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Http;
-using System.Xml.Serialization;
-using Geta.GoogleProductFeed.Models;
-using Geta.GoogleProductFeed.Repositories;
 
 namespace Geta.GoogleProductFeed.Controllers
 {
