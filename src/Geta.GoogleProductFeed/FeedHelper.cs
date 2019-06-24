@@ -1,8 +1,10 @@
-﻿using System.IO;
-using System.Xml.Serialization;
+﻿using Castle.Core.Internal;
 using EPiServer.ServiceLocation;
 using Geta.GoogleProductFeed.Models;
 using Geta.GoogleProductFeed.Repositories;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Geta.GoogleProductFeed
 {
@@ -21,28 +23,31 @@ namespace Geta.GoogleProductFeed
 
         public bool GenerateAndSaveData()
         {
-            var feed = _feedBuilder.Build();
+            List<Feed> feeds = _feedBuilder.Build();
 
-            if (feed == null)
+            if (feeds.IsNullOrEmpty())
                 return false;
 
-            var feedData = new FeedData
+            foreach (var feed in feeds)
             {
-                CreatedUtc = feed.Updated
-            };
+                var feedData = new FeedData
+                {
+                    CreatedUtc = feed.Updated,
+                    Link = feed.Link
+                };
 
-            using (var ms = new MemoryStream())
-            {
-                var serializer = new XmlSerializer(typeof(Feed), Ns);
-                serializer.Serialize(ms, feed);
-                feedData.FeedBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    var serializer = new XmlSerializer(typeof(Feed), Ns);
+                    serializer.Serialize(ms, feed);
+                    feedData.FeedBytes = ms.ToArray();
+                }
+
+                _feedRepository.Save(feedData);
+
+                // we only need to keep one version of each feed - remove older ones to avoid filling up the database
+                _feedRepository.RemoveOldVersion();
             }
-
-            _feedRepository.Save(feedData);
-
-            // we only need to keep one version - remove older ones to avoid filling up the database
-            _feedRepository.RemoveOldVersion();
-
             return true;
         }
 

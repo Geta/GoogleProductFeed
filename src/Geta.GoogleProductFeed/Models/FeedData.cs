@@ -7,6 +7,7 @@ namespace Geta.GoogleProductFeed.Models
     {
         public DateTime CreatedUtc { get; set; }
         public byte[] FeedBytes { get; set; }
+        public string Link { get; set; }
 
         [Key]
         public int Id { get; set; }

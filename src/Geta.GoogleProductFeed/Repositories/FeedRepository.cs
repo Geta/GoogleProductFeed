@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using Geta.GoogleProductFeed.Models;
+using System;
+using System.Linq;
+using System.Web;
 
 namespace Geta.GoogleProductFeed.Repositories
 {
@@ -24,11 +25,11 @@ namespace Geta.GoogleProductFeed.Repositories
                         CreatedUtc = x.CreatedUtc
                     }).OrderByDescending(x => x.CreatedUtc).ToList();
 
-            if (items.Count > 1)
+            if (items.Count > (items.Count * 2) - 1)
             {
-                for (int i = items.Count - 1; i >= 1; i--)
+                for (int i = items.Count - 1; i >= i / 2; i--)
                 {
-                    var feedData = new FeedData{Id = items[i].Id};
+                    var feedData = new FeedData { Id = items[i].Id };
 
                     _applicationDbContext.FeedData.Attach(feedData);
                     _applicationDbContext.FeedData.Remove(feedData);
@@ -40,7 +41,8 @@ namespace Geta.GoogleProductFeed.Repositories
 
         public FeedData GetLatestFeedData()
         {
-            return _applicationDbContext.FeedData.OrderByDescending(f => f.CreatedUtc).FirstOrDefault();
+            var siteHost = HttpContext.Current.Request.Url.Host;
+            return _applicationDbContext.FeedData.Where(f => f.Link.Contains(siteHost)).OrderByDescending(f => f.CreatedUtc).FirstOrDefault();
         }
 
         public void Save(FeedData feedData)
