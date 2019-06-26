@@ -2,7 +2,6 @@
 using Geta.GoogleProductFeed.Models;
 using System;
 using System.Linq;
-using System.Web;
 
 namespace Geta.GoogleProductFeed.Repositories
 {
@@ -38,9 +37,8 @@ namespace Geta.GoogleProductFeed.Repositories
             }
         }
 
-        public FeedData GetLatestFeedData()
+        public FeedData GetLatestFeedData(string siteHost)
         {
-            var siteHost = HttpContext.Current.Request.Url.Host;
             return _applicationDbContext.FeedData.Where(f => f.Link.Contains(siteHost)).OrderByDescending(f => f.CreatedUtc).FirstOrDefault();
         }
 

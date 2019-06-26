@@ -53,9 +53,9 @@ namespace Geta.GoogleProductFeed
             return true;
         }
 
-        public Feed GetLatestFeed()
+        public Feed GetLatestFeed(string siteHost)
         {
-            var feedData = _feedRepository.GetLatestFeedData();
+            var feedData = _feedRepository.GetLatestFeedData(siteHost);
 
             if (feedData == null)
                 return null;

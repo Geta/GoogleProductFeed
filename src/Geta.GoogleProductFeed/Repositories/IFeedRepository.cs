@@ -6,7 +6,7 @@ namespace Geta.GoogleProductFeed.Repositories
     {
         void RemoveOldVersions(int numberOfGeneratedFeeds);
 
-        FeedData GetLatestFeedData();
+        FeedData GetLatestFeedData(string siteHost);
 
         void Save(FeedData feedData);
     }

@@ -11,7 +11,7 @@ namespace Geta.GoogleProductFeed
     {
         bool GenerateAndSaveData();
 
-        Feed GetLatestFeed();
+        Feed GetLatestFeed(string siteHost);
 
     }
 }

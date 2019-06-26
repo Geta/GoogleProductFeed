@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Http;
 
 namespace Geta.GoogleProductFeed.Controllers
@@ -17,7 +18,8 @@ namespace Geta.GoogleProductFeed.Controllers
         [Route("googleproductfeed")]
         public IHttpActionResult Get()
         {
-            var feed = _feedHelper.GetLatestFeed();
+            var siteHost = HttpContext.Current.Request.Url.Host;
+            var feed = _feedHelper.GetLatestFeed(siteHost);
 
             if (feed == null)
                 return Content(HttpStatusCode.NotFound, "No feed generated", new NamespacedXmlMediaTypeFormatter());
