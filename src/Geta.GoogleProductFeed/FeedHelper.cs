@@ -28,6 +28,8 @@ namespace Geta.GoogleProductFeed
             if (feeds.IsNullOrEmpty())
                 return false;
 
+            var numberOfGeneratedFeeds = feeds.Count;
+
             foreach (var feed in feeds)
             {
                 var feedData = new FeedData
@@ -45,9 +47,9 @@ namespace Geta.GoogleProductFeed
 
                 _feedRepository.Save(feedData);
 
-                // we only need to keep one version of each feed - remove older ones to avoid filling up the database
-                _feedRepository.RemoveOldVersion();
             }
+            // we only need to keep one version of each feed - remove older ones to avoid filling up the database
+            _feedRepository.RemoveOldVersions(numberOfGeneratedFeeds);
             return true;
         }
 

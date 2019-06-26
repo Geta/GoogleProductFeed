@@ -16,7 +16,7 @@ namespace Geta.GoogleProductFeed.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void RemoveOldVersion()
+        public void RemoveOldVersions(int numberOfGeneratedFeeds)
         {
             var items = _applicationDbContext.FeedData
                     .Select(x => new
@@ -25,16 +25,15 @@ namespace Geta.GoogleProductFeed.Repositories
                         CreatedUtc = x.CreatedUtc
                     }).OrderByDescending(x => x.CreatedUtc).ToList();
 
-            if (items.Count > (items.Count * 2) - 1)
+            if (items.Count > numberOfGeneratedFeeds)
             {
-                for (int i = items.Count - 1; i >= i / 2; i--)
+                for (int i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
                 {
                     var feedData = new FeedData { Id = items[i].Id };
 
                     _applicationDbContext.FeedData.Attach(feedData);
                     _applicationDbContext.FeedData.Remove(feedData);
                 }
-
                 _applicationDbContext.SaveChanges();
             }
         }
