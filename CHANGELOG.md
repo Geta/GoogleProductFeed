@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Breaking change
 
-- Updated FeedBuilder abstract method Build to return List<Feed> which enables generation of multiple feeds for multisite projects.
+- FeedBuilder's abstract method Build return value is changed to List<Feed>, which enables generation of multiple feeds for multisite projects.
 
 ## [3.0.0]
 
