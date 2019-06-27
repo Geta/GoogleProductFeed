@@ -4,9 +4,9 @@ namespace Geta.GoogleProductFeed.Repositories
 {
     public interface IFeedRepository
     {
-        void RemoveOldVersion();
-        
-        FeedData GetLatestFeedData();
+        void RemoveOldVersions(int numberOfGeneratedFeeds);
+
+        FeedData GetLatestFeedData(string siteHost);
 
         void Save(FeedData feedData);
     }

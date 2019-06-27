@@ -1,8 +1,10 @@
-﻿using System.IO;
-using System.Xml.Serialization;
+﻿using Castle.Core.Internal;
 using EPiServer.ServiceLocation;
 using Geta.GoogleProductFeed.Models;
 using Geta.GoogleProductFeed.Repositories;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Geta.GoogleProductFeed
 {
@@ -21,34 +23,39 @@ namespace Geta.GoogleProductFeed
 
         public bool GenerateAndSaveData()
         {
-            var feed = _feedBuilder.Build();
+            List<Feed> feeds = _feedBuilder.Build();
 
-            if (feed == null)
+            if (feeds.IsNullOrEmpty())
                 return false;
 
-            var feedData = new FeedData
-            {
-                CreatedUtc = feed.Updated
-            };
+            var numberOfGeneratedFeeds = feeds.Count;
 
-            using (var ms = new MemoryStream())
+            foreach (var feed in feeds)
             {
-                var serializer = new XmlSerializer(typeof(Feed), Ns);
-                serializer.Serialize(ms, feed);
-                feedData.FeedBytes = ms.ToArray();
+                var feedData = new FeedData
+                {
+                    CreatedUtc = feed.Updated,
+                    Link = feed.Link
+                };
+
+                using (var ms = new MemoryStream())
+                {
+                    var serializer = new XmlSerializer(typeof(Feed), Ns);
+                    serializer.Serialize(ms, feed);
+                    feedData.FeedBytes = ms.ToArray();
+                }
+
+                _feedRepository.Save(feedData);
+
             }
-
-            _feedRepository.Save(feedData);
-
-            // we only need to keep one version - remove older ones to avoid filling up the database
-            _feedRepository.RemoveOldVersion();
-
+            // we only need to keep one version of each feed - remove older ones to avoid filling up the database
+            _feedRepository.RemoveOldVersions(numberOfGeneratedFeeds);
             return true;
         }
 
-        public Feed GetLatestFeed()
+        public Feed GetLatestFeed(string siteHost)
         {
-            var feedData = _feedRepository.GetLatestFeedData();
+            var feedData = _feedRepository.GetLatestFeedData(siteHost);
 
             if (feedData == null)
                 return null;

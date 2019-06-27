@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using Geta.GoogleProductFeed.Models;
+using System;
+using System.Linq;
 
 namespace Geta.GoogleProductFeed.Repositories
 {
@@ -15,7 +15,7 @@ namespace Geta.GoogleProductFeed.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public void RemoveOldVersion()
+        public void RemoveOldVersions(int numberOfGeneratedFeeds)
         {
             var items = _applicationDbContext.FeedData
                     .Select(x => new
@@ -24,23 +24,22 @@ namespace Geta.GoogleProductFeed.Repositories
                         CreatedUtc = x.CreatedUtc
                     }).OrderByDescending(x => x.CreatedUtc).ToList();
 
-            if (items.Count > 1)
+            if (items.Count > numberOfGeneratedFeeds)
             {
-                for (int i = items.Count - 1; i >= 1; i--)
+                for (int i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
                 {
-                    var feedData = new FeedData{Id = items[i].Id};
+                    var feedData = new FeedData { Id = items[i].Id };
 
                     _applicationDbContext.FeedData.Attach(feedData);
                     _applicationDbContext.FeedData.Remove(feedData);
                 }
-
                 _applicationDbContext.SaveChanges();
             }
         }
 
-        public FeedData GetLatestFeedData()
+        public FeedData GetLatestFeedData(string siteHost)
         {
-            return _applicationDbContext.FeedData.OrderByDescending(f => f.CreatedUtc).FirstOrDefault();
+            return _applicationDbContext.FeedData.Where(f => f.Link.Contains(siteHost)).OrderByDescending(f => f.CreatedUtc).FirstOrDefault();
         }
 
         public void Save(FeedData feedData)
