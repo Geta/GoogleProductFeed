@@ -20,15 +20,16 @@ Default URL is: /googleproductfeed
 
 ## FeedBuilder
 
-You need to implement the abstract class FeedBuilder and the method Build. This will provide the feed data.
+You need to implement the abstract class FeedBuilder and the method Build. This will provide the feed data. Build method returns List of feeds, this is required so that FeedBuilder can produce feeds for both multisite and singlesite projects. Example bellow can be extended to support multisite projects.
 
 ### Example
 
 ```csharp
 public class EpiFeedBuilder : FeedBuilder
 {
-	public override Feed Build()
+	public override List<Feed> Build()
 	{
+		var generatedFeeds = new List<Feed>();
 		var feed = new Feed
 		{
 			Updated = DateTime.UtcNow,
@@ -98,8 +99,9 @@ public class EpiFeedBuilder : FeedBuilder
 		}
 
 		feed.Entries = entries;
+		generatedFeeds.Add(feed);
 
-		return feed;
+		return generatedFeeds;
 	}
 }
 ```
