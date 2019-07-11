@@ -119,3 +119,12 @@ Populating the feed is handled through a scheduled job and the result is seriali
 
 ## Troubleshooting
 If your request to /googleproductfeed returns 404 with message 'No feed generated', make sure you run the job to populate the feed.
+
+
+## Package maintainer
+
+https://github.com/frederikvig
+
+## Changelog
+
+[Changelog](CHANGELOG.md)
