@@ -43,7 +43,7 @@ namespace Geta.GoogleProductFeed
 
         public bool GenerateAndSaveData()
         {
-            List<Feed> feeds = _feedBuilder.Build();
+            var feeds = _feedBuilder.Build();
 
             if(feeds.IsNullOrEmpty())
                 return false;
@@ -81,8 +81,7 @@ namespace Geta.GoogleProductFeed
                 return null;
 
             var serializer = new XmlSerializer(typeof(Feed), Ns);
-
-            using (MemoryStream ms = new MemoryStream(feedData.FeedBytes))
+            using (var ms = new MemoryStream(feedData.FeedBytes))
             {
                 return serializer.Deserialize(ms) as Feed;
             }

@@ -1,4 +1,4 @@
-# Geta Google Product Feed
+bellow# Geta Google Product Feed
 
 ![](http://tc.geta.no/app/rest/builds/buildType:(id:TeamFrederik_GoogleProductFeed_CreateAndPublishNuGetPackage)/statusIcon)
 [![Platform](https://img.shields.io/badge/Platform-.NET%204.6.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
@@ -20,7 +20,7 @@ Default URL is: /googleproductfeed
 
 ## FeedBuilder
 
-You need to implement the abstract class FeedBuilder and the method Build. This will provide the feed data. Build method returns List of feeds, this is required so that FeedBuilder can produce feeds for both multisite and singlesite projects. Example bellow can be extended to support multisite projects.
+You need to implement the abstract class FeedBuilder and the method Build. This will provide the feed data. Build method returns List of feeds, this is required so that FeedBuilder can produce feeds for both multisite and singlesite projects. Example below can be extended to support multisite projects.
 
 ### Example
 
@@ -112,10 +112,10 @@ Then you need to use this as the default implementation for FeedBuilder. Using S
 For<FeedBuilder>().Use<EpiFeedBuilder>();
 ```
 
-Make sure dependency injection is setup for Web API. The quickest way to do this is install the package: Foundation.WebApi.
+Make sure dependency injection is setup for Web API.
 
 ## Feed Generation
-Populating the feed is handled through a scheduled job and the result is serialized and stored in the database. See job 'Google ProductFeed - Create feed' in admin mode. 
+Populating the feed is handled through a scheduled job and the result is serialized and stored in the database. See job `Google ProductFeed - Create feed` in admin panel. 
 
 ## Troubleshooting
 If your request to /googleproductfeed returns 404 with message 'No feed generated', make sure you run the job to populate the feed.

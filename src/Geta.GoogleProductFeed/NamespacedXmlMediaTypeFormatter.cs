@@ -19,7 +19,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -33,40 +33,26 @@ namespace Geta.GoogleProductFeed
     public class NamespacedXmlMediaTypeFormatter : XmlMediaTypeFormatter
     {
         private readonly XmlSerializerNamespaces _namespaces;
-        private readonly Dictionary<Type, XmlSerializer> _serializers;
+        private readonly ConcurrentDictionary<Type, XmlSerializer> _serializers;
 
         public NamespacedXmlMediaTypeFormatter()
         {
             _namespaces = new XmlSerializerNamespaces();
             _namespaces.Add("g", "http://base.google.com/ns/1.0");
-            _serializers = new Dictionary<Type, XmlSerializer>();
+            _serializers = new ConcurrentDictionary<Type, XmlSerializer>();
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
-            lock (_serializers)
-            {
-                if(!_serializers.ContainsKey(type))
-                {
-                    var serializer = new XmlSerializer(type, "http://www.w3.org/2005/Atom");
-
-                    _serializers.Add(type, serializer);
-                }
-            }
+            if(!_serializers.ContainsKey(type))
+                _serializers.TryAdd(type, new XmlSerializer(type, "http://www.w3.org/2005/Atom"));
 
             return Task.Factory.StartNew(() =>
                                          {
-                                             XmlSerializer serializer;
-                                             lock (_serializers)
-                                             {
-                                                 serializer = _serializers[type];
-                                             }
+                                             if(!_serializers.TryGetValue(type, out var serializer))
+                                                 return;
 
-                                             var writerSettings = new XmlWriterSettings
-                                             {
-                                                 OmitXmlDeclaration = false
-                                             };
-
+                                             var writerSettings = new XmlWriterSettings { OmitXmlDeclaration = false };
                                              var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
                                              serializer.Serialize(xmlWriter, value, _namespaces);
                                          });
