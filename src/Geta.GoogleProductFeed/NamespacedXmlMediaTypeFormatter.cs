@@ -1,4 +1,24 @@
-﻿using System;
+﻿// Copyright (c) 2019 Geta Digital.
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -12,45 +32,44 @@ namespace Geta.GoogleProductFeed
 {
     public class NamespacedXmlMediaTypeFormatter : XmlMediaTypeFormatter
     {
-        public XmlSerializerNamespaces Namespaces { get; private set; }
-        Dictionary<Type, XmlSerializer> Serializers { get; set; }
+        private readonly XmlSerializerNamespaces _namespaces;
+        private readonly Dictionary<Type, XmlSerializer> _serializers;
 
         public NamespacedXmlMediaTypeFormatter()
         {
-            Namespaces = new XmlSerializerNamespaces();
-            Namespaces.Add("g", "http://base.google.com/ns/1.0");
-
-            Serializers = new Dictionary<Type, XmlSerializer>();
+            _namespaces = new XmlSerializerNamespaces();
+            _namespaces.Add("g", "http://base.google.com/ns/1.0");
+            _serializers = new Dictionary<Type, XmlSerializer>();
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
-            lock (Serializers)
+            lock (_serializers)
             {
-                if (!Serializers.ContainsKey(type))
+                if(!_serializers.ContainsKey(type))
                 {
                     var serializer = new XmlSerializer(type, "http://www.w3.org/2005/Atom");
 
-                    Serializers.Add(type, serializer);
+                    _serializers.Add(type, serializer);
                 }
             }
 
             return Task.Factory.StartNew(() =>
-            {
-                XmlSerializer serializer;
-                lock (Serializers)
-                {
-                    serializer = Serializers[type];
-                }
+                                         {
+                                             XmlSerializer serializer;
+                                             lock (_serializers)
+                                             {
+                                                 serializer = _serializers[type];
+                                             }
 
-                var writerSettings = new XmlWriterSettings
-                {
-                    OmitXmlDeclaration = false
-                };
+                                             var writerSettings = new XmlWriterSettings
+                                             {
+                                                 OmitXmlDeclaration = false
+                                             };
 
-                var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
-                serializer.Serialize(xmlWriter, value, Namespaces);
-            });
+                                             var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
+                                             serializer.Serialize(xmlWriter, value, _namespaces);
+                                         });
         }
     }
 }
