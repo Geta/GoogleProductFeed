@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  geta-epi-openidconnect-sample:
+    ports:
+      - "80"
+networks:
+  default:
+    external:
+      name: nat

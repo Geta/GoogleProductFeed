@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  geta-epi-openidconnect-sample:
+    image: ${DOCKER_REGISTRY-}geta-epi-openidconnect-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks: 
+      geta-epi-openidconnect-network:
+        ipv4_address: 172.16.239.81
+    depends_on:
+     - geta-epi-openidconnect-db
+    mac_address: 84-69-95-91-02-F2
+  geta-epi-openidconnect-db:
+    image: microsoft/mssql-server-windows-developer:1709
+    environment:
+     - ACCEPT_EULA=Y
+     - sa_password=0p3n!D
+     - attach_dbs=[{'dbName':'EPiServerDB_aefc3fcd','dbFiles':['C:\\data\\EPiServerDB_aefc3fcd.mdf','C:\\data\\EPiServerDB_aefc3fcd_log.ldf']}]
+    volumes:
+      - ../Geta.EPi.OpenIdConnect.Sample/App_Data:C:/data/
+    networks:
+      geta-epi-openidconnect-network:
+        ipv4_address: 172.16.239.82
+networks:
+  geta-epi-openidconnect-network:
+    ipam:
+      driver: default
+      config:
+         - subnet: '172.16.239.0/24'
