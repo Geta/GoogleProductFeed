@@ -17,8 +17,6 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
     public class EpiFeedBuilder : FeedBuilder
     {
         private readonly IContentLoader _contentLoader;
-        private readonly CurrencyService _currencyService;
-        private readonly CurrentMarket _currentMarket;
         private readonly IPricingService _pricingService;
         private readonly ReferenceConverter _referenceConverter;
         private readonly ISiteDefinitionRepository _siteDefinitionRepository;
@@ -26,15 +24,11 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
         public EpiFeedBuilder(
             IContentLoader contentLoader,
             ReferenceConverter referenceConverter,
-            CurrencyService currencyService,
-            CurrentMarket currentMarket,
             IPricingService pricingService,
             ISiteDefinitionRepository siteDefinitionRepository)
         {
             _contentLoader = contentLoader;
             _referenceConverter = referenceConverter;
-            _currencyService = currencyService;
-            _currentMarket = currentMarket;
             _pricingService = pricingService;
             _siteDefinitionRepository = siteDefinitionRepository;
         }
