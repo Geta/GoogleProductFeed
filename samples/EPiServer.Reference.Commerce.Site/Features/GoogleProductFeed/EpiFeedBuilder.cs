@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
@@ -9,10 +8,8 @@ using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Extensions;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Services;
 using EPiServer.Web;
-using EPiServer.Web.Routing;
 using Geta.GoogleProductFeed;
 using Geta.GoogleProductFeed.Models;
-using Mediachase.Commerce;
 using Mediachase.Commerce.Catalog;
 
 namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
@@ -20,13 +17,19 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
     public class EpiFeedBuilder : FeedBuilder
     {
         private readonly IContentLoader _contentLoader;
-        private readonly ReferenceConverter _referenceConverter;
         private readonly CurrencyService _currencyService;
         private readonly CurrentMarket _currentMarket;
         private readonly IPricingService _pricingService;
+        private readonly ReferenceConverter _referenceConverter;
         private readonly ISiteDefinitionRepository _siteDefinitionRepository;
 
-        public EpiFeedBuilder(IContentLoader contentLoader, ReferenceConverter referenceConverter, CurrencyService currencyService, CurrentMarket currentMarket, IPricingService pricingService, ISiteDefinitionRepository siteDefinitionRepository)
+        public EpiFeedBuilder(
+            IContentLoader contentLoader,
+            ReferenceConverter referenceConverter,
+            CurrencyService currencyService,
+            CurrentMarket currentMarket,
+            IPricingService pricingService,
+            ISiteDefinitionRepository siteDefinitionRepository)
         {
             _contentLoader = contentLoader;
             _referenceConverter = referenceConverter;
@@ -48,11 +51,8 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
                 Link = siteUrl
             };
 
-            var catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
-
             var entries = new List<Entry>();
-            var market = _currentMarket.GetCurrentMarket();
-            var currency = _currencyService.GetCurrentCurrency();
+            var catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
 
             foreach (var catalogReference in catalogReferences)
             {
@@ -69,18 +69,18 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
                         Id = variantCode,
                         Title = variationContent.DisplayName,
                         Description = product?.Description.ToHtmlString(),
-                        Link = variationContent.GetUrl(), //variationContent.ContentLink.GetFriendlyUrl(true),
+                        Link = variationContent.GetUrl(),
                         Condition = "new",
                         Availablity = "in stock",
                         Brand = product?.Brand,
-                        MPN = "",
-                        GTIN = variantCode,
-                        GoogleProductCategory = "",
+                        MPN = string.Empty,
+                        GTIN = "725272730706",
+                        GoogleProductCategory = string.Empty,
                         Shipping = new List<Shipping>
                         {
                             new Shipping
                             {
-                                Price = "0.00",
+                                Price = "1 USD",
                                 Country = "US",
                                 Service = "Standard"
                             }
@@ -93,10 +93,10 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
 
                     if(defaultPrice != null)
                     {
-                        var discountPrice = _pricingService.GetDiscountPrice(variantCode).UnitPrice;
+                        var discountPrice = _pricingService.GetDiscountPrice(variantCode);
 
-                        entry.Price = defaultPrice.UnitPrice.Amount.ToString("F");
-                        entry.SalePrice = discountPrice.Amount.ToString("F");
+                        entry.Price = defaultPrice.UnitPrice.FormatPrice();
+                        entry.SalePrice = discountPrice != null ? discountPrice.UnitPrice.FormatPrice() : string.Empty;
                         entry.SalePriceEffectiveDate = $"{DateTime.UtcNow:yyyy-MM-ddThh:mm:ss}/{DateTime.UtcNow.AddDays(7):yyyy-MM-ddThh:mm:ss}";
                     }
 

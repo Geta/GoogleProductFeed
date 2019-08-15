@@ -26,20 +26,20 @@ namespace EPiServer.Reference.Commerce.Site.Features.Market.Services
         public virtual Currency GetCurrentCurrency()
         {
             Currency currency;
-            return TryGetCurrency(_cookieService.Get(CurrencyCookie), out currency) ? 
-                currency : 
+            return TryGetCurrency(_cookieService.Get(CurrencyCookie), out currency) ?
+                currency :
                 CurrentMarket.DefaultCurrency;
         }
 
         public bool SetCurrentCurrency(string currencyCode)
         {
             Currency currency;
-            
+
             if (!TryGetCurrency(currencyCode, out currency))
             {
                 return false;
             }
-                
+
             _cookieService.Set(CurrencyCookie, currencyCode);
 
             return true;

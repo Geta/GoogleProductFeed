@@ -18,7 +18,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Castle.Core.Internal;
@@ -70,6 +69,7 @@ namespace Geta.GoogleProductFeed
 
             // we only need to keep one version of each feed - remove older ones to avoid filling up the database
             _feedRepository.RemoveOldVersions(numberOfGeneratedFeeds);
+
             return true;
         }
 
