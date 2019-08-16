@@ -1,7 +1,10 @@
-﻿using EPiServer.ServiceLocation;
-using Geta.GoogleProductFeed.Models;
+﻿// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under MIT. See the LICENSE file in the project root for more information
+
 using System;
 using System.Linq;
+using EPiServer.ServiceLocation;
+using Geta.GoogleProductFeed.Models;
 
 namespace Geta.GoogleProductFeed.Repositories
 {
@@ -18,21 +21,22 @@ namespace Geta.GoogleProductFeed.Repositories
         public void RemoveOldVersions(int numberOfGeneratedFeeds)
         {
             var items = _applicationDbContext.FeedData
-                    .Select(x => new
-                    {
-                        Id = x.Id,
-                        CreatedUtc = x.CreatedUtc
-                    }).OrderByDescending(x => x.CreatedUtc).ToList();
+                                             .Select(x => new
+                                             {
+                                                 x.Id,
+                                                 x.CreatedUtc
+                                             }).OrderByDescending(x => x.CreatedUtc).ToList();
 
             if (items.Count > numberOfGeneratedFeeds)
             {
-                for (int i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
+                for (var i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
                 {
                     var feedData = new FeedData { Id = items[i].Id };
 
                     _applicationDbContext.FeedData.Attach(feedData);
                     _applicationDbContext.FeedData.Remove(feedData);
                 }
+
                 _applicationDbContext.SaveChanges();
             }
         }
