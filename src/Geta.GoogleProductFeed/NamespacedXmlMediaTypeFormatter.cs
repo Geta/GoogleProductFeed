@@ -15,9 +15,6 @@ namespace Geta.GoogleProductFeed
 {
     public class NamespacedXmlMediaTypeFormatter : XmlMediaTypeFormatter
     {
-        public XmlSerializerNamespaces Namespaces { get; private set; }
-        Dictionary<Type, XmlSerializer> Serializers { get; set; }
-
         public NamespacedXmlMediaTypeFormatter()
         {
             Namespaces = new XmlSerializerNamespaces();
@@ -25,6 +22,9 @@ namespace Geta.GoogleProductFeed
 
             Serializers = new Dictionary<Type, XmlSerializer>();
         }
+
+        public XmlSerializerNamespaces Namespaces { get; private set; }
+        Dictionary<Type, XmlSerializer> Serializers { get; set; }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
@@ -39,21 +39,21 @@ namespace Geta.GoogleProductFeed
             }
 
             return Task.Factory.StartNew(() =>
-            {
-                XmlSerializer serializer;
-                lock (Serializers)
-                {
-                    serializer = Serializers[type];
-                }
+                                         {
+                                             XmlSerializer serializer;
+                                             lock (Serializers)
+                                             {
+                                                 serializer = Serializers[type];
+                                             }
 
-                var writerSettings = new XmlWriterSettings
-                {
-                    OmitXmlDeclaration = false
-                };
+                                             var writerSettings = new XmlWriterSettings
+                                             {
+                                                 OmitXmlDeclaration = false
+                                             };
 
-                var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
-                serializer.Serialize(xmlWriter, value, Namespaces);
-            });
+                                             var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
+                                             serializer.Serialize(xmlWriter, value, Namespaces);
+                                         });
         }
     }
 }

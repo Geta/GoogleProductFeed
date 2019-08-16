@@ -23,12 +23,13 @@ namespace Geta.GoogleProductFeed.Repositories
             var items = _applicationDbContext.FeedData
                                              .Select(x => new
                                              {
-                                                 x.Id, x.CreatedUtc
+                                                 x.Id,
+                                                 x.CreatedUtc
                                              }).OrderByDescending(x => x.CreatedUtc).ToList();
 
-            if(items.Count > numberOfGeneratedFeeds)
+            if (items.Count > numberOfGeneratedFeeds)
             {
-                for (int i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
+                for (var i = items.Count - 1; i >= numberOfGeneratedFeeds; i--)
                 {
                     var feedData = new FeedData { Id = items[i].Id };
 
@@ -47,7 +48,7 @@ namespace Geta.GoogleProductFeed.Repositories
 
         public void Save(FeedData feedData)
         {
-            if(feedData == null)
+            if (feedData == null)
             {
                 return;
             }

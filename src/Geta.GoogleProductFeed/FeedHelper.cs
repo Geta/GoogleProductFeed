@@ -28,7 +28,7 @@ namespace Geta.GoogleProductFeed
         {
             List<Feed> feeds = _feedBuilder.Build();
 
-            if(feeds.IsNullOrEmpty())
+            if (feeds.IsNullOrEmpty())
                 return false;
 
             var numberOfGeneratedFeeds = feeds.Count;
@@ -61,7 +61,7 @@ namespace Geta.GoogleProductFeed
         {
             var feedData = _feedRepository.GetLatestFeedData(siteHost);
 
-            if(feedData == null)
+            if (feedData == null)
                 return null;
 
             var serializer = new XmlSerializer(typeof(Feed), Ns);

@@ -23,8 +23,10 @@ namespace Geta.GoogleProductFeed.Controllers
             var siteHost = HttpContext.Current.Request.Url.Host;
             var feed = _feedHelper.GetLatestFeed(siteHost);
 
-            if(feed == null)
+            if (feed == null)
+            {
                 return Content(HttpStatusCode.NotFound, "No feed generated", new NamespacedXmlMediaTypeFormatter());
+            }
 
             feed.Entries = feed.Entries.Where(e => e.Link.Contains(Request.RequestUri.Host)).ToList();
 

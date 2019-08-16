@@ -33,7 +33,7 @@ namespace Geta.GoogleProductFeed.Models
         public string Condition { get; set; }
 
         [XmlElement("availability", Namespace = "http://base.google.com/ns/1.0")]
-        public string Availablity { get; set; }
+        public string Availability { get; set; }
 
         [XmlElement("price", Namespace = "http://base.google.com/ns/1.0")]
         public string Price { get; set; }
