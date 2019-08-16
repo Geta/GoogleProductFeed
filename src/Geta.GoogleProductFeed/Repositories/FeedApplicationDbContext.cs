@@ -1,6 +1,5 @@
 ﻿// Copyright (c) Geta Digital. All rights reserved.
-// Licensed under MIT.
-// See the LICENSE file in the project root for more information
+// Licensed under MIT. See the LICENSE file in the project root for more information
 
 using System.Data.Entity;
 using Geta.GoogleProductFeed.Models;
