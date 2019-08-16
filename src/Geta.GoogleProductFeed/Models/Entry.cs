@@ -1,10 +1,15 @@
-﻿using System;
+﻿// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under MIT.
+// See the LICENSE file in the project root for more information
+
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Geta.GoogleProductFeed.Models
 {
-    [XmlType(TypeName = "entry"), Serializable]
+    [XmlType(TypeName = "entry")]
+    [Serializable]
     public class Entry
     {
         [XmlElement("id", Namespace = "http://base.google.com/ns/1.0")]
@@ -89,7 +94,7 @@ namespace Geta.GoogleProductFeed.Models
 
         [XmlElement("shipping_width", Namespace = "http://base.google.com/ns/1.0")]
         public string ShippingWidth { get; set; }
-        
+
         [XmlElement("identifier_exists", Namespace = "http://base.google.com/ns/1.0")]
         public string IdentifierExists { get; set; }
     }

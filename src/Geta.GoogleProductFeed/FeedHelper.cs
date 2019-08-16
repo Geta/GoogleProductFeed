@@ -1,19 +1,22 @@
-﻿using Castle.Core.Internal;
+﻿// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under MIT.
+// See the LICENSE file in the project root for more information
+
+using System.IO;
+using System.Xml.Serialization;
+using Castle.Core.Internal;
 using EPiServer.ServiceLocation;
 using Geta.GoogleProductFeed.Models;
 using Geta.GoogleProductFeed.Repositories;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
 
 namespace Geta.GoogleProductFeed
 {
     [ServiceConfiguration(typeof(IFeedHelper))]
     public class FeedHelper : IFeedHelper
     {
+        private const string Ns = "http://www.w3.org/2005/Atom";
         private readonly FeedBuilder _feedBuilder;
         private readonly IFeedRepository _feedRepository;
-        private const string Ns = "http://www.w3.org/2005/Atom";
 
         public FeedHelper(FeedBuilder feedBuilder, IFeedRepository feedRepository)
         {
@@ -23,9 +26,9 @@ namespace Geta.GoogleProductFeed
 
         public bool GenerateAndSaveData()
         {
-            List<Feed> feeds = _feedBuilder.Build();
+            var feeds = _feedBuilder.Build();
 
-            if (feeds.IsNullOrEmpty())
+            if(feeds.IsNullOrEmpty())
                 return false;
 
             var numberOfGeneratedFeeds = feeds.Count;
@@ -46,10 +49,11 @@ namespace Geta.GoogleProductFeed
                 }
 
                 _feedRepository.Save(feedData);
-
             }
+
             // we only need to keep one version of each feed - remove older ones to avoid filling up the database
             _feedRepository.RemoveOldVersions(numberOfGeneratedFeeds);
+
             return true;
         }
 
@@ -57,12 +61,11 @@ namespace Geta.GoogleProductFeed
         {
             var feedData = _feedRepository.GetLatestFeedData(siteHost);
 
-            if (feedData == null)
+            if(feedData == null)
                 return null;
 
             var serializer = new XmlSerializer(typeof(Feed), Ns);
-
-            using (MemoryStream ms = new MemoryStream(feedData.FeedBytes))
+            using (var ms = new MemoryStream(feedData.FeedBytes))
             {
                 return serializer.Deserialize(ms) as Feed;
             }
