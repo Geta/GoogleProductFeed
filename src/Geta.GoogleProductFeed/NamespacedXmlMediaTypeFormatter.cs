@@ -2,7 +2,7 @@
 // Licensed under MIT. See the LICENSE file in the project root for more information
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -15,35 +15,28 @@ namespace Geta.GoogleProductFeed
 {
     public class NamespacedXmlMediaTypeFormatter : XmlMediaTypeFormatter
     {
+        private readonly XmlSerializerNamespaces _namespaces;
+        private readonly ConcurrentDictionary<Type, XmlSerializer> _serializers;
+
         public NamespacedXmlMediaTypeFormatter()
         {
-            Namespaces = new XmlSerializerNamespaces();
-            Namespaces.Add("g", "http://base.google.com/ns/1.0");
-
-            Serializers = new Dictionary<Type, XmlSerializer>();
+            _namespaces = new XmlSerializerNamespaces();
+            _namespaces.Add("g", "http://base.google.com/ns/1.0");
+            _serializers = new ConcurrentDictionary<Type, XmlSerializer>();
         }
-
-        public XmlSerializerNamespaces Namespaces { get; private set; }
-        Dictionary<Type, XmlSerializer> Serializers { get; set; }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
-            lock (Serializers)
+            if (!_serializers.ContainsKey(type))
             {
-                if (!Serializers.ContainsKey(type))
-                {
-                    var serializer = new XmlSerializer(type, "http://www.w3.org/2005/Atom");
-
-                    Serializers.Add(type, serializer);
-                }
+                _serializers.TryAdd(type, new XmlSerializer(type, "http://www.w3.org/2005/Atom"));
             }
 
             return Task.Factory.StartNew(() =>
                                          {
-                                             XmlSerializer serializer;
-                                             lock (Serializers)
+                                             if(!_serializers.TryGetValue(type, out var serializer))
                                              {
-                                                 serializer = Serializers[type];
+                                                 return;
                                              }
 
                                              var writerSettings = new XmlWriterSettings
@@ -52,7 +45,7 @@ namespace Geta.GoogleProductFeed
                                              };
 
                                              var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
-                                             serializer.Serialize(xmlWriter, value, Namespaces);
+                                             serializer.Serialize(xmlWriter, value, _namespaces);
                                          });
         }
     }
