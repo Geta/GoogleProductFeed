@@ -27,8 +27,10 @@ namespace Geta.GoogleProductFeed
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
-            if(!_serializers.ContainsKey(type))
+            if (!_serializers.ContainsKey(type))
+            {
                 _serializers.TryAdd(type, new XmlSerializer(type, "http://www.w3.org/2005/Atom"));
+            }
 
             return Task.Factory.StartNew(() =>
                                          {
