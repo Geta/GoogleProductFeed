@@ -41,6 +41,7 @@ namespace Geta.GoogleProductFeed
                                              {
                                                  OmitXmlDeclaration = false
                                              };
+
                                              var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
                                              serializer.Serialize(xmlWriter, value, _namespaces);
                                          });
