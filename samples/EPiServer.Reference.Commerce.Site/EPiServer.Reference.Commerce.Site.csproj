@@ -394,7 +394,9 @@
     <Compile Include="Features\Checkout\Models\ShippingMethodInfoModel.cs" />
     <Compile Include="Features\Checkout\ViewModels\ShipmentConfirmationViewModel.cs" />
     <Compile Include="Features\Checkout\ViewModels\UpdateAddressViewModel.cs" />
+    <Compile Include="Features\GoogleProductFeed\EpiBaseImplementation.cs" />
     <Compile Include="Features\GoogleProductFeed\EpiFeedBuilder.cs" />
+    <Compile Include="Features\GoogleProductFeed\DefaultFeedBuilderBase.cs" />
     <Compile Include="Features\GoogleProductFeed\MoneyExtensions.cs" />
     <Compile Include="Features\Login\Controllers\RegistrationConfirmationMailController.cs" />
     <Compile Include="Features\Login\Services\OptinService.cs" />

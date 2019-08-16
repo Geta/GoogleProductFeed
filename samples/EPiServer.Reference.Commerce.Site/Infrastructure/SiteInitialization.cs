@@ -91,7 +91,8 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddHttpContextOrThreadScoped<SiteContext, CustomCurrencySiteContext>();
             services.AddTransient<HttpContextBase>(locator => HttpContext.Current.ContextBaseOrNull());
 
-            services.AddTransient<FeedBuilder, EpiFeedBuilder>();
+            //services.AddTransient<FeedBuilder, EpiFeedBuilder>();
+            services.AddTransient<FeedBuilder, EpiBaseImplementation>();
 
             services.AddSingleton<ServiceAccessor<IContentRouteHelper>>(locator => locator.GetInstance<IContentRouteHelper>);
 
