@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright (c) Geta Digital. All rights reserved.
+// Licensed under MIT. See the LICENSE file in the project root for more information
+
 using Geta.GoogleProductFeed.Models;
 
 namespace Geta.GoogleProductFeed
@@ -12,6 +10,5 @@ namespace Geta.GoogleProductFeed
         bool GenerateAndSaveData();
 
         Feed GetLatestFeed(string siteHost);
-
     }
 }
