@@ -10,9 +10,9 @@
     <repository type="git" url="https://github.com/Geta/GoogleProductFeed" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <iconUrl>https://cdn.geta.no/opensource/icons/Geta-logo-3.png</iconUrl>
+    <iconUrl>https://cdn.getadigital.com/opensource/icons/Geta-logo-3.png</iconUrl>
     <releaseNotes>Google Product Feed generator</releaseNotes>
-    <copyright>Copyright Geta 2019</copyright>
+    <copyright>Copyright Geta Digital 2019</copyright>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[11.2.1, 12)" />
       <dependency id="EntityFramework" version="6.1.0" />
