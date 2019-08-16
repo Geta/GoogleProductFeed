@@ -30,9 +30,14 @@ namespace Geta.GoogleProductFeed
             return Task.Factory.StartNew(() =>
                                          {
                                              if(!_serializers.TryGetValue(type, out var serializer))
+                                             {
                                                  return;
+                                             }
 
-                                             var writerSettings = new XmlWriterSettings { OmitXmlDeclaration = false };
+                                             var writerSettings = new XmlWriterSettings
+                                             {
+                                                 OmitXmlDeclaration = false
+                                             };
                                              var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
                                              serializer.Serialize(xmlWriter, value, _namespaces);
                                          });
