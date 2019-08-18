@@ -65,7 +65,7 @@ namespace EPiServer.Reference.Commerce.Site.Features.GoogleProductFeed
                         Description = product?.Description.ToHtmlString(),
                         Link = variationContent.GetUrl(),
                         Condition = "new",
-                        Availablity = "in stock",
+                        Availability = "in stock",
                         Brand = product?.Brand,
                         MPN = string.Empty,
                         GTIN = "725272730706",
