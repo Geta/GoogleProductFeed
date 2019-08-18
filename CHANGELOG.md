@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.4]
+- Added Quicksilver demo site
+- Code reformat and license update
+
 ## [3.0.2]
 
 ### Breaking change
