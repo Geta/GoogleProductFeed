@@ -120,10 +120,15 @@ Populating the feed is handled through a scheduled job and the result is seriali
 ## Troubleshooting
 If your request to `/googleproductfeed` returns 404 with message `No feed generated`, make sure you run the job to populate the feed.
 
-## Build & Run Locally
-googleproductfeed.getalocaltest.me
+## Local development setup
+See description in [shared repository](https://github.com/Geta/package-shared/blob/master/README.md#local-development-set-up) regarding how to setup local development environment.
 
-172.16.238.51
+### Docker hostnames
+Instead of using the static IP addresses the following hostnames can be used out-of-the-box.
+
+http://googleproductfeed.getalocaltest.me
+http://manager-googleproductfeed.getalocaltest.me
+
 
 ## Package maintainer
 
