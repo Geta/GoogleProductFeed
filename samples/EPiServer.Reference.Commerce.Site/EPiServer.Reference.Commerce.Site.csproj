@@ -14,7 +14,7 @@
     <RootNamespace>EPiServer.Reference.Commerce.Site</RootNamespace>
     <AssemblyName>EPiServer.Reference.Commerce.Site</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44301</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
@@ -1009,7 +1009,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50244</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://googleproductfeed.localtest.me</IISUrl>
+          <IISUrl>http://localhost:50249/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

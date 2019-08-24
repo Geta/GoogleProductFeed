@@ -11,7 +11,7 @@ services:
         ipv4_address: 172.16.238.51
     depends_on:
      - geta-googleproductfeed-sample-db
-    mac_address: 84-69-95-6C-7F-86
+    mac_address: 66-B5-C0-CF-87-96
     volumes:
       - ../appdata/:C:/appdata/
   geta-googleproductfeed-sample-manager:
@@ -34,7 +34,7 @@ services:
       - ../EPiServer.Reference.Commerce.Site/App_Data/:C:/data/
     networks:
      geta-googleproductfeed-network:
-        ipv4_address: 172.16.238.13
+        ipv4_address: 172.16.238.53
 networks:
   geta-googleproductfeed-network:
     ipam:
