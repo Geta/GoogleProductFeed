@@ -27,6 +27,22 @@ You need to implement the abstract class FeedBuilder and the method Build. This 
 ```csharp
 public class EpiFeedBuilder : FeedBuilder
 {
+        private readonly IContentLoader _contentLoader;
+        private readonly ReferenceConverter _referenceConverter;
+        private readonly ICurrentMarket _currentMarket;
+        private readonly ICurrencyService _currencyService;
+
+        public EpiFeedBuilder(IContentLoader contentLoader,
+                              ReferenceConverter referenceConverter,
+			      ICurrentMarket currentMarket,
+			      ICurrencyService currencyService)
+        {
+            _contentLoader = contentLoader;
+            _referenceConverter = referenceConverter;
+            _currentMarket = currentMarket;
+            _currencyService = currencyService;
+        }
+
 	public override List<Feed> Build()
 	{
 		var generatedFeeds = new List<Feed>();
@@ -41,7 +57,7 @@ public class EpiFeedBuilder : FeedBuilder
 
 		var entries = new List<Entry>();
 		var market = _currentMarket.GetCurrentMarket();
-		var currency = _currencyservice.GetCurrentCurrency();
+		var currency = _currencyService.GetCurrentCurrency();
 
 		foreach (var catalogReference in catalogReferences)
 		{
