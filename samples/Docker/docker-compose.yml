@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  geta-googleproductfeed-sample-web:
+    image: ${DOCKER_REGISTRY-}geta-googleproductfeed-sample-web
+    build:
+      context: ..\EPiServer.Reference.Commerce.Site
+      dockerfile: Dockerfile
+    networks:
+      geta-googleproductfeed-network:
+        ipv4_address: 172.16.238.51
+    depends_on:
+     - geta-googleproductfeed-sample-db
+    mac_address: 66-B5-C0-CF-87-96
+    volumes:
+      - ../appdata/:C:/appdata/
+  geta-googleproductfeed-sample-manager:
+    image: ${DOCKER_REGISTRY-}geta-googleproductfeed-sample-manager
+    build:
+      context: ..\EPiServer.Reference.Commerce.Manager
+      dockerfile: Dockerfile
+    networks:
+     geta-googleproductfeed-network:
+        ipv4_address: 172.16.238.52
+    depends_on:
+     - geta-googleproductfeed-sample-db
+  geta-googleproductfeed-sample-db:
+    image: microsoft/mssql-server-windows-developer:1709
+    environment:
+     - ACCEPT_EULA=Y
+     - sa_password=GoogleProductFeed19
+     - attach_dbs=[{'dbName':'GoogleProductFeed.Quicksilver.Cms','dbFiles':['C:\\data\\GoogleProductFeed.Quicksilver.Cms.mdf','C:\\data\\GoogleProductFeed.Quicksilver.Cms_log.ldf']},{'dbName':'GoogleProductFeed.Quicksilver.Commerce','dbFiles':['C:\\data\\GoogleProductFeed.Quicksilver.Commerce.mdf','C:\\data\\GoogleProductFeed.Quicksilver.Commerce_log.ldf']}]
+    volumes:
+      - ../EPiServer.Reference.Commerce.Site/App_Data/:C:/data/
+    networks:
+     geta-googleproductfeed-network:
+        ipv4_address: 172.16.238.53
+networks:
+  geta-googleproductfeed-network:
+    ipam:
+      driver: default
+      config:
+         - subnet: '172.16.238.0/24'

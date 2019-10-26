@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  geta-googleproductfeed-sample-web:
+    ports:
+      - "80"
+  geta-googleproductfeed-sample-manager:
+    ports:
+      - "80"
+networks:
+  default:
+    external:
+      name: nat
