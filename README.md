@@ -1,7 +1,8 @@
 # Geta Google Product Feed
 ![](http://tc.geta.no/app/rest/builds/buildType:(id:TeamFrederik_GoogleProductFeed_CreateAndPublishNuGetPackage)/statusIcon)
 [![Platform](https://img.shields.io/badge/Platform-.NET%204.6.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
-[![Platform](https://img.shields.io/badge/EPiServer-%2011-orange.svg?style=flat)](http://world.episerver.com/cms/)
+[![Platform](https://img.shields.io/badge/Episerver-%2011-orange.svg?style=flat)](http://world.episerver.com/cms/)
+[![Platform](https://img.shields.io/badge/Episerver%20Commerce-13-orange.svg?style=flat)](http://world.episerver.com/commerce/)
 
 Credits: [How to make a Google Shopping Feed with C# and serve it through the Web API](http://blog.codenamed.nl/2015/05/14/creating-a-google-shopping-feed-with-c/).
 
@@ -21,7 +22,7 @@ You need to implement the abstract class FeedBuilder and the method Build. This 
 
 ### Default FeedBuilder
 You can iherit from default base feed builder class (`DefaultFeedBuilderBase`) which will help you get started.
-It contains CatalogEntry enumeration code and sample error handling. You will need to implement following methods:
+It contains `CatalogEntry` enumeration code and sample error handling. You will need to implement following methods:
 
 ```csharp
 protected abstract Feed GenerateFeedEntity();
@@ -29,7 +30,7 @@ protected abstract Feed GenerateFeedEntity();
 protected abstract Entry GenerateEntry(CatalogContentBase catalogContent);
 ```
 
-So for example:
+For example:
 
 ```csharp
 public class EpiFeedBuilder : DefaultFeedBuilderBase
@@ -42,7 +43,7 @@ public class EpiFeedBuilder : DefaultFeedBuilderBase
         ReferenceConverter referenceConverter,
         IPricingService pricingService,
         ISiteDefinitionRepository siteDefinitionRepository,
-        ILogger logger) : base(contentLoader, referenceConverter, logger)
+        IContentLanguageAccessor languageAccessor) : base(contentLoader, referenceConverter, languageAccessor)
     {
         _pricingService = pricingService;
         _siteUri = siteDefinitionRepository.List().FirstOrDefault()?.Hosts.GetPrimaryHostDefinition().Url;
@@ -88,6 +89,7 @@ public class EpiFeedBuilder : FeedBuilder
     private readonly ReferenceConverter _referenceConverter;
     private readonly IPricingService _pricingService;
     private readonly ILogger _logger;
+    private readonly IContentLanguageAccessor _languageAccessor;
     private readonly Uri _siteUri;
 
     public EpiFeedBuilder(
@@ -95,43 +97,44 @@ public class EpiFeedBuilder : FeedBuilder
         ReferenceConverter referenceConverter,
         IPricingService pricingService,
         ISiteDefinitionRepository siteDefinitionRepository,
-        ILogger logger)
+        IContentLanguageAccessor languageAccessor)
     {
         _contentLoader = contentLoader;
         _referenceConverter = referenceConverter;
         _pricingService = pricingService;
-        _logger = logger;
+        _logger = LogManager.GetLogger(typeof(EpiFeedBuilder));
+        _languageAccessor = languageAccessor;
         _siteUri = GetPrimaryHostDefinition(siteDefinitionRepository.List().FirstOrDefault()?.Hosts)?.Url;
     }
 
     public override List<Feed> Build()
     {
-        var generatedFeeds = new List<Feed>();
-        var feed = new Feed
+        List<Feed> generatedFeeds = new List<Feed>();
+        Feed feed = new Feed
         {
             Updated = DateTime.UtcNow,
             Title = "My products",
             Link = _siteUri.ToString()
         };
 
-        var catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
-        var entries = new List<Entry>();
+        IEnumerable<ContentReference> catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
+        IEnumerable<CatalogContentBase> items = _contentLoader.GetItems(catalogReferences, CreateDefaultLoadOption()).OfType<CatalogContentBase>();
 
-        foreach (var catalogReference in catalogReferences)
+        List<Entry> entries = new List<Entry>();
+        foreach (CatalogContentBase catalogContent in items)
         {
-            var catalogContent = _contentLoader.Get<CatalogContentBase>(catalogReference);
-            var variationContent = catalogContent as FashionVariant;
+            FashionVariant variationContent = catalogContent as FashionVariant;
 
             try
             {
                 if (variationContent == null)
                     continue;
 
-                var product = _contentLoader.Get<CatalogContentBase>(variationContent.GetParentProducts().FirstOrDefault()) as FashionProduct;
-                var variantCode = variationContent.Code;
-                var defaultPrice = _pricingService.GetPrice(variantCode);
+                FashionProduct product = _contentLoader.Get<CatalogContentBase>(variationContent.GetParentProducts().FirstOrDefault()) as FashionProduct;
+                string variantCode = variationContent.Code;
+                IPriceValue defaultPrice = _pricingService.GetPrice(variantCode);
 
-                var entry = new Entry
+                Entry entry = new Entry
                 {
                     Id = variationContent.Code,
                     Title = variationContent.DisplayName,
@@ -158,12 +161,12 @@ public class EpiFeedBuilder : FeedBuilder
 
                 if (!string.IsNullOrEmpty(image))
                 {
-                    entry.ImageLink = Uri.TryCreate(_siteUri, image, out var imageUri) ? imageUri.ToString() : image;
+                    entry.ImageLink = Uri.TryCreate(_siteUri, image, out Uri imageUri) ? imageUri.ToString() : image;
                 }
 
                 if (defaultPrice != null)
                 {
-                    var discountPrice = _pricingService.GetDiscountPrice(variantCode);
+                    IPriceValue discountPrice = _pricingService.GetDiscountPrice(variantCode);
 
                     entry.Price = defaultPrice.UnitPrice.ToString();
                     entry.SalePrice = discountPrice.ToString();
@@ -193,6 +196,16 @@ public class EpiFeedBuilder : FeedBuilder
 
         return hosts.FirstOrDefault(h => h.Type == HostDefinitionType.Primary && !h.IsWildcardHost())
                 ?? hosts.FirstOrDefault(h => !h.IsWildcardHost());
+    }
+
+    private LoaderOptions CreateDefaultLoadOption()
+    {
+        LoaderOptions loaderOptions = new LoaderOptions
+        {
+            LanguageLoaderOption.FallbackWithMaster(_languageAccessor.Language)
+        };
+
+        return loaderOptions;
     }
 }
 ```

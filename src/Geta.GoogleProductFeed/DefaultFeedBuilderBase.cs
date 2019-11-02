@@ -3,8 +3,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer;
 using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.Core;
 using EPiServer.Logging;
 using Geta.GoogleProductFeed.Models;
 using Mediachase.Commerce.Catalog;
@@ -13,36 +15,32 @@ namespace Geta.GoogleProductFeed
 {
     public abstract class DefaultFeedBuilderBase : FeedBuilder
     {
-        // ReSharper disable once MemberCanBePrivate.Global
-        protected readonly IContentLoader _contentLoader;
-        // ReSharper disable once MemberCanBePrivate.Global
-        protected readonly ReferenceConverter _referenceConverter;
-        // ReSharper disable once MemberCanBePrivate.Global
-        protected readonly ILogger _logger;
+        private readonly IContentLoader _contentLoader;
+        private readonly ReferenceConverter _referenceConverter;
+        private readonly IContentLanguageAccessor _languageAccessor;
+        private readonly ILogger _logger;
 
-        public DefaultFeedBuilderBase(IContentLoader contentLoader, ReferenceConverter referenceConverter, ILogger logger)
+        public DefaultFeedBuilderBase(IContentLoader contentLoader, ReferenceConverter referenceConverter, IContentLanguageAccessor languageAccessor)
         {
             _contentLoader = contentLoader;
             _referenceConverter = referenceConverter;
-            _logger = logger;
+            _languageAccessor = languageAccessor;
+            _logger = LogManager.GetLogger(typeof(DefaultFeedBuilderBase));
         }
 
         public override List<Feed> Build()
         {
-            var generatedFeeds = new List<Feed>();
+            List<Feed> generatedFeeds = new List<Feed>();
+            Feed feed = GenerateFeedEntity() ?? throw new ArgumentNullException($"{nameof(GenerateFeedEntity)} returned null");
+            IEnumerable<ContentReference> catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
+            IEnumerable<CatalogContentBase> items = _contentLoader.GetItems(catalogReferences, CreateDefaultLoadOption()).OfType<CatalogContentBase>();
 
-            var feed = GenerateFeedEntity() ?? throw new ArgumentNullException($"{nameof(GenerateFeedEntity)} returned null");
-
-            var entries = new List<Entry>();
-            var catalogReferences = _contentLoader.GetDescendents(_referenceConverter.GetRootLink());
-
-            foreach (var catalogReference in catalogReferences)
+            List<Entry> entries = new List<Entry>();
+            foreach (CatalogContentBase catalogContent in items)
             {
-                var catalogContent = _contentLoader.Get<CatalogContentBase>(catalogReference);
-
                 try
                 {
-                    var entry = GenerateEntry(catalogContent);
+                    Entry entry = GenerateEntry(catalogContent);
 
                     if (entry != null)
                     {
@@ -64,5 +62,15 @@ namespace Geta.GoogleProductFeed
         protected abstract Feed GenerateFeedEntity();
 
         protected abstract Entry GenerateEntry(CatalogContentBase catalogContent);
+
+        private LoaderOptions CreateDefaultLoadOption()
+        {
+            LoaderOptions loaderOptions = new LoaderOptions
+            {
+                LanguageLoaderOption.FallbackWithMaster(_languageAccessor.Language)
+            };
+
+            return loaderOptions;
+        }
     }
 }
