@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Geta Digital. All rights reserved.
 // Licensed under Apache-2.0. See the LICENSE file in the project root for more information
 
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Castle.Core.Internal;
@@ -25,7 +26,7 @@ namespace Geta.GoogleProductFeed
 
         public bool GenerateAndSaveData()
         {
-            var feeds = _feedBuilder.Build();
+            List<Feed> feeds = _feedBuilder.Build();
 
             if (feeds.IsNullOrEmpty())
             {
@@ -60,7 +61,7 @@ namespace Geta.GoogleProductFeed
 
         public Feed GetLatestFeed(string siteHost)
         {
-            var feedData = _feedRepository.GetLatestFeedData(siteHost);
+            FeedData feedData = _feedRepository.GetLatestFeedData(siteHost);
 
             if (feedData == null)
             {

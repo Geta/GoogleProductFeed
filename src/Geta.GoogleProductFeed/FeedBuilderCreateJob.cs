@@ -18,7 +18,7 @@ namespace Geta.GoogleProductFeed
 
         public override string Execute()
         {
-            var result = _feedHelper.GenerateAndSaveData();
+            bool result = _feedHelper.GenerateAndSaveData();
 
             return result ? "Job successfully executed. Feed created and saved to the database." : "Job failed - FeedBuilder.Build() returned null.";
         }
