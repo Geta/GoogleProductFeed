@@ -61,7 +61,7 @@ namespace Geta.GoogleProductFeed
 
         public Feed GetLatestFeed(string siteHost)
         {
-            var feedData = _feedRepository.GetLatestFeedData(siteHost);
+            FeedData feedData = _feedRepository.GetLatestFeedData(siteHost);
 
             if (feedData == null)
             {

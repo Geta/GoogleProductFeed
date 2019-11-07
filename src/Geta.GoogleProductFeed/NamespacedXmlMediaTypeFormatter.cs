@@ -34,7 +34,7 @@ namespace Geta.GoogleProductFeed
 
             return Task.Factory.StartNew(() =>
                                          {
-                                             if(!_serializers.TryGetValue(type, out var serializer))
+                                             if(!_serializers.TryGetValue(type, out XmlSerializer serializer))
                                              {
                                                  return;
                                              }
@@ -44,7 +44,7 @@ namespace Geta.GoogleProductFeed
                                                  OmitXmlDeclaration = false
                                              };
 
-                                             var xmlWriter = XmlWriter.Create(writeStream, writerSettings);
+                                             XmlWriter xmlWriter = XmlWriter.Create(writeStream, writerSettings);
                                              serializer.Serialize(xmlWriter, value, _namespaces);
                                          });
         }
