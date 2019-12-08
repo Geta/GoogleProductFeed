@@ -237,7 +237,7 @@ http://manager-googleproductfeed.getalocaltest.me
 
 
 ## Package maintainer
-https://github.com/frederikvig
+https://github.com/valdisiljuconoks
 
 ## Changelog
 [Changelog](CHANGELOG.md)
