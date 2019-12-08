@@ -14,7 +14,7 @@
     <releaseNotes>Google Product Feed generator</releaseNotes>
     <copyright>Copyright Geta Digital 2019</copyright>
     <dependencies>
-      <dependency id="EPiServer.CMS.Core" version="[11.2.1, 12)" />
+      <dependency id="EPiServer.CMS.Core" version="[11.11.1, 12)" />
       <dependency id="EPiServer.Commerce.Core" version="[13.0.0, 14.0.0)" />
       <dependency id="EntityFramework" version="6.1.0" />
     </dependencies>
