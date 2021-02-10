@@ -7,7 +7,6 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/Geta/GoogleProductFeed</projectUrl>
-    <repository type="git" url="https://github.com/Geta/GoogleProductFeed" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <iconUrl>https://cdn.getadigital.com/opensource/icons/Geta-logo-3.png</iconUrl>
