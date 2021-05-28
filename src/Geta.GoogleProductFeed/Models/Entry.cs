@@ -77,7 +77,7 @@ namespace Geta.GoogleProductFeed.Models
         
         #endregion
         
-        #region Price & availability
+        #region Detailed product description
         
         [XmlElement("condition", Namespace = "http://base.google.com/ns/1.0")]
         public string Condition { get; set; }
