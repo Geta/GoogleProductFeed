@@ -243,7 +243,12 @@
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\Feed.cs" />
     <Compile Include="Models\FeedData.cs" />
+    <Compile Include="Models\Installment.cs" />
+    <Compile Include="Models\LoyaltyPoints.cs" />
+    <Compile Include="Models\ProductDetail.cs" />
     <Compile Include="Models\Shipping.cs" />
+    <Compile Include="Models\SubscriptionCost.cs" />
+    <Compile Include="Models\Tax.cs" />
     <Compile Include="NamespacedXmlMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FeedApplicationDbContext.cs" />
