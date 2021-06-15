@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.1]
+### Changed
+- Change uint types to strings, so it can be omitted in serialization if null
+
 ## [4.0.0]
 ### Breaking change
 - Rename of Entry property from `Availablity` to `Availability`
