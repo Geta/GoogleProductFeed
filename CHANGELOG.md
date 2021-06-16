@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.1]
+### Changed
+- Change Multipack, MaxHandlingTime, MinHandlingTime to nullable uint
+
 ## [4.1.0]
 ### Changed
 - Change uint types to strings, so it can be omitted in serialization if null
