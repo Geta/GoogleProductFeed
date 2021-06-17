@@ -86,7 +86,7 @@ namespace Geta.GoogleProductFeed.Models
         public string Adult { get; set; }
         
         [XmlElement("multipack", Namespace = "http://base.google.com/ns/1.0")]
-        public string Multipack { get; set; }
+        public uint? Multipack { get; set; }
         
         [XmlElement("is_bundle", Namespace = "http://base.google.com/ns/1.0")]
         public string IsBundle { get; set; }
@@ -182,10 +182,10 @@ namespace Geta.GoogleProductFeed.Models
         public string TransitTimeLabel { get; set; }
         
         [XmlElement("max_handling_time", Namespace = "http://base.google.com/ns/1.0")]
-        public string MaxHandlingTime { get; set; }
+        public uint? MaxHandlingTime { get; set; }
         
         [XmlElement("min_handling_time", Namespace = "http://base.google.com/ns/1.0")]
-        public string MinHandlingTime { get; set; }
+        public uint? MinHandlingTime { get; set; }
 
         #endregion
         
