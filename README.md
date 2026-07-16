@@ -6,6 +6,8 @@
 [![Platform](https://img.shields.io/badge/Episerver-%2011-orange.svg?style=flat)](http://world.episerver.com/cms/)
 [![Platform](https://img.shields.io/badge/Episerver%20Commerce-13-orange.svg?style=flat)](http://world.episerver.com/commerce/)
 
+**For Episerver/Optimizely 12+ see: https://github.com/Geta/geta-optimizely-googleproductfeed**
+
 Credits: [How to make a Google Shopping Feed with C# and serve it through the Web API](http://blog.codenamed.nl/2015/05/14/creating-a-google-shopping-feed-with-c/).
 
 This will create a Google Product Feed based on the [Atom specification](https://support.google.com/merchants/answer/160593?hl=en). For information on what is required and what the different attributes/properties mean, please see the [Product data specification](https://support.google.com/merchants/answer/188494).
